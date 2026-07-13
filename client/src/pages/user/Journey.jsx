@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 import api from '../../services/api';
-import { Heart, Calendar, ArrowLeft } from 'lucide-react';
+import { Heart, Calendar, ArrowLeft, LogOut } from 'lucide-react';
 import ParticlesBg from '../../components/ParticlesBg';
 
 const Journey = () => {
@@ -48,6 +48,11 @@ const Journey = () => {
     });
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem('verified');
+    navigate('/');
+  };
+
   return (
     <div className="min-h-screen relative overflow-hidden" ref={containerRef}>
       <ParticlesBg />
@@ -55,14 +60,16 @@ const Journey = () => {
       {/* Fixed header */}
       <div className="sticky top-0 z-20 bg-dark-900/80 backdrop-blur-md border-b border-white/5">
         <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-          <button onClick={() => navigate('/home')} className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors">
-            <ArrowLeft className="w-5 h-5" /> Back
+          <button onClick={() => navigate('/home')} className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors w-20">
+            <ArrowLeft className="w-5 h-5" /> <span className="hidden md:inline">Back</span>
           </button>
           <h1 className="text-xl font-bold text-white flex items-center gap-2">
             <Heart className="w-5 h-5 text-primary-500" fill="currentColor" />
             Our Journey
           </h1>
-          <div className="w-20" /> {/* spacer */}
+          <button onClick={handleLogout} className="flex items-center justify-end gap-2 text-gray-400 hover:text-rose-400 transition-colors w-20">
+            <span className="hidden md:inline">Logout</span> <LogOut className="w-5 h-5" />
+          </button>
         </div>
       </div>
 

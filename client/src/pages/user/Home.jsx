@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import api from '../../services/api';
-import { Heart, Image as ImageIcon, Video, Map, Sparkles } from 'lucide-react';
+import { Heart, Image as ImageIcon, Video, Map, Sparkles, LogOut } from 'lucide-react';
 import ParticlesBg from '../../components/ParticlesBg';
 import RelationshipCounter from '../../components/RelationshipCounter';
 import LoveJar from '../../components/LoveJar';
@@ -37,11 +37,27 @@ const Home = () => {
     fetchData();
   }, [navigate]);
 
+  const handleLogout = () => {
+    localStorage.removeItem('verified');
+    navigate('/');
+  };
+
   return (
     <div className="min-h-screen relative p-6 md:p-12 overflow-hidden">
       <ParticlesBg />
       
       <div className="max-w-6xl mx-auto relative z-10">
+        {/* Logout Button */}
+        <motion.button
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          onClick={handleLogout}
+          className="absolute top-0 right-0 md:top-2 md:right-2 flex items-center gap-2 bg-dark-800/50 hover:bg-dark-700 border border-white/10 text-gray-300 hover:text-rose-400 px-4 py-2 rounded-full text-sm font-medium transition-all backdrop-blur-sm z-50"
+        >
+          <LogOut className="w-4 h-4" />
+          <span className="hidden md:inline">Logout</span>
+        </motion.button>
+
         {/* Header */}
         <motion.div 
           initial={{ opacity: 0, y: -20 }}
