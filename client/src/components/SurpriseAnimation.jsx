@@ -119,7 +119,7 @@ const SurpriseAnimation = ({ boyAvatarUrl, girlAvatarUrl }) => {
 
               {/* BOY (REALISTIC SUIT SILHOUETTE) */}
               <motion.div
-                className="relative flex flex-col items-center origin-bottom"
+                className="relative flex flex-col items-center origin-bottom z-30"
                 initial={{ x: -300, opacity: 0 }}
                 animate={
                   stage >= 2
@@ -211,7 +211,7 @@ const SurpriseAnimation = ({ boyAvatarUrl, girlAvatarUrl }) => {
 
               {/* GIRL (REALISTIC DRESS SILHOUETTE) */}
               <motion.div
-                className="relative flex flex-col items-center origin-bottom"
+                className="relative flex flex-col items-center origin-bottom z-20"
                 initial={{ x: 300, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
                 transition={{ duration: 1.5, delay: 0.3, type: 'spring', stiffness: 60 }}
@@ -262,12 +262,15 @@ const SurpriseAnimation = ({ boyAvatarUrl, girlAvatarUrl }) => {
                     >
                       {/* Left Arm bending to face or accepting flower */}
                       <motion.div 
-                        className="w-6 h-16 bg-[#f5d0b5] rounded-full -ml-8 shadow-md" 
-                        animate={stage >= 4 ? { rotate: -15, y: 25, x: -10 } : { rotate: 45, y: 0, x: 0 }}
+                        className="w-6 h-16 bg-[#f5d0b5] rounded-full -ml-8 shadow-md origin-top" 
+                        animate={stage >= 4 ? { rotate: 80, x: -10, y: 0 } : { rotate: 45, x: 0, y: 0 }}
                         transition={{ duration: 1, type: 'spring' }}
                       />
                       {/* Right Arm bending to face */}
-                      <div className="w-6 h-16 bg-[#f5d0b5] rounded-full -rotate-45 -mr-8 shadow-md" />
+                      <motion.div 
+                        className="w-6 h-16 bg-[#f5d0b5] rounded-full -mr-8 shadow-md origin-top"
+                        animate={{ rotate: -45 }}
+                      />
                     </motion.div>
                   )}
                 </AnimatePresence>
