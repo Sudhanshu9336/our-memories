@@ -12,6 +12,7 @@ const PlacesManage = () => {
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({ name: '', description: '', coverImage: '', date: '' });
   const [editId, setEditId] = useState(null);
+  const [isUploadingCover, setIsUploadingCover] = useState(false);
 
   useEffect(() => {
     fetchPlaces();
@@ -45,6 +46,27 @@ const PlacesManage = () => {
       fetchPlaces();
     } catch (err) {
       toast.error(err.response?.data?.message || 'Action failed');
+    }
+  };
+
+  const handleFileUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    setIsUploadingCover(true);
+    const uploadData = new FormData();
+    uploadData.append('avatar', file);
+
+    try {
+      const res = await api.post('/settings/upload-avatar', uploadData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+      setFormData(prev => ({ ...prev, coverImage: res.data.url }));
+      toast.success('Image uploaded successfully');
+    } catch (err) {
+      toast.error('Failed to upload image');
+    } finally {
+      setIsUploadingCover(false);
     }
   };
 
@@ -154,12 +176,27 @@ const PlacesManage = () => {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-1">Cover Image URL</label>
-                <input 
-                  type="text" 
-                  className="w-full bg-dark-900 border border-white/10 rounded-lg px-3 py-2 text-white focus:border-primary-500 focus:outline-none"
-                  value={formData.coverImage} onChange={(e) => setFormData({...formData, coverImage: e.target.value})}
-                />
+                <label className="block text-sm font-medium text-gray-300 mb-1">Cover Image (URL or Upload)</label>
+                <div className="flex gap-2">
+                  <input 
+                    type="text" 
+                    placeholder="Paste URL or upload file..."
+                    className="flex-1 bg-dark-900 border border-white/10 rounded-lg px-3 py-2 text-white focus:border-primary-500 focus:outline-none"
+                    value={formData.coverImage} onChange={(e) => setFormData({...formData, coverImage: e.target.value})}
+                  />
+                  <div className="relative">
+                    <input 
+                      type="file" 
+                      accept="image/*"
+                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                      onChange={handleFileUpload}
+                      disabled={isUploadingCover}
+                    />
+                    <button type="button" className="bg-primary-600 hover:bg-primary-500 text-white px-4 py-2 rounded-lg transition-colors whitespace-nowrap">
+                      {isUploadingCover ? 'Uploading...' : 'Upload File'}
+                    </button>
+                  </div>
+                </div>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-300 mb-1">Date</label>
