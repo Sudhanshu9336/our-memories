@@ -82,21 +82,21 @@ const SurpriseAnimation = ({ boyAvatarUrl, girlAvatarUrl }) => {
 
             {/* ===== THE MAIN SCENE IMAGE ===== */}
             <motion.div
-              className="absolute inset-0 flex items-center justify-center"
+              className="absolute inset-0 flex items-center justify-center p-4 md:p-8"
               initial={{ scale: 1.15, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ duration: 2.5, ease: 'easeOut' }}
             >
-              <div className="relative w-full h-full">
+              <div className="relative w-full max-w-[100vh] aspect-square rounded-2xl md:rounded-3xl overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.5)]">
                 {/* Main proposal scene */}
                 <img
                   src="/proposal_scene.png"
                   alt="Romantic Proposal Scene"
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-contain bg-black"
                 />
 
                 {/* Soft dreamy overlay */}
-                <div className="absolute inset-0" style={{
+                <div className="absolute inset-0 pointer-events-none" style={{
                   background: 'radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.4) 100%)'
                 }} />
 
@@ -106,9 +106,9 @@ const SurpriseAnimation = ({ boyAvatarUrl, girlAvatarUrl }) => {
                     <motion.div
                       className="absolute overflow-hidden"
                       style={{
-                        top: '22%',
-                        left: '30%',
-                        width: '10%',
+                        top: '26%',
+                        left: '28%',
+                        width: '10.5%',
                         aspectRatio: '1',
                         borderRadius: '50%',
                         border: '2px solid rgba(255,255,255,0.1)',
@@ -128,7 +128,7 @@ const SurpriseAnimation = ({ boyAvatarUrl, girlAvatarUrl }) => {
                     <motion.div
                       className="absolute overflow-hidden"
                       style={{
-                        top: '16%',
+                        top: '19.5%',
                         left: '58%',
                         width: '9.5%',
                         aspectRatio: '1',
