@@ -198,7 +198,7 @@ const SurpriseAnimation = ({ boyAvatarUrl, girlAvatarUrl }) => {
                       <motion.div 
                         className="text-5xl drop-shadow-2xl relative z-10" 
                         style={{ filter: 'drop-shadow(0px 10px 10px rgba(225,29,72,0.4))' }}
-                        animate={stage >= 4 ? { x: 135, y: -15, rotate: 30 } : { x: 0, y: 0, rotate: 0 }}
+                        animate={stage >= 4 ? { x: 160, y: -90, rotate: 45 } : { x: 0, y: 0, rotate: 0 }}
                         transition={{ duration: 1, type: 'spring' }}
                       >
                         🌹
@@ -263,7 +263,7 @@ const SurpriseAnimation = ({ boyAvatarUrl, girlAvatarUrl }) => {
                       {/* Left Arm bending to face or accepting flower */}
                       <motion.div 
                         className="w-6 h-16 bg-[#f5d0b5] rounded-full -ml-8 shadow-md origin-top" 
-                        animate={stage >= 4 ? { rotate: 80, x: -10, y: 0 } : { rotate: 45, x: 0, y: 0 }}
+                        animate={stage >= 4 ? { rotate: 65, x: -15, y: 10 } : { rotate: 45, x: 0, y: 0 }}
                         transition={{ duration: 1, type: 'spring' }}
                       />
                       {/* Right Arm bending to face */}
