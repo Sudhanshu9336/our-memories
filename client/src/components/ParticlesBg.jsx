@@ -1,39 +1,45 @@
-import { useCallback } from "react";
-import Particles from "@tsparticles/react";
-import { loadSlim } from "tsparticles-slim";
+import React from 'react';
+import { motion } from 'framer-motion';
 
 const ParticlesBg = () => {
-  const particlesInit = useCallback(async engine => {
-    await loadSlim(engine);
-  }, []);
+  // Generate 40 random particles
+  const particles = Array.from({ length: 40 }).map((_, i) => ({
+    id: i,
+    size: Math.random() * 4 + 1,
+    left: `${Math.random() * 100}%`,
+    top: `${Math.random() * 100}%`,
+    duration: Math.random() * 20 + 10,
+    delay: Math.random() * -20,
+    color: ['#e11d48', '#f43f5e', '#fb7185'][Math.floor(Math.random() * 3)]
+  }));
 
   return (
-    <Particles
-      id="tsparticles"
-      init={particlesInit}
-      options={{
-        background: { color: { value: "transparent" } },
-        fpsLimit: 120,
-        interactivity: {
-          events: { onHover: { enable: true, mode: "repulse" } },
-          modes: { repulse: { distance: 100, duration: 0.4 } },
-        },
-        particles: {
-          color: { value: ["#e11d48", "#f43f5e", "#fb7185"] },
-          links: { enable: false },
-          move: {
-            direction: "none", enable: true, outModes: { default: "bounce" },
-            random: true, speed: 1, straight: false,
-          },
-          number: { density: { enable: true, area: 800 }, value: 40 },
-          opacity: { value: { min: 0.1, max: 0.5 } },
-          shape: { type: "circle" },
-          size: { value: { min: 1, max: 4 } },
-        },
-        detectRetina: true,
-      }}
-      className="absolute inset-0 z-0 pointer-events-none"
-    />
+    <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+      {particles.map((p) => (
+        <motion.div
+          key={p.id}
+          className="absolute rounded-full"
+          style={{
+            width: p.size,
+            height: p.size,
+            left: p.left,
+            top: p.top,
+            backgroundColor: p.color,
+            opacity: 0.2 + Math.random() * 0.3
+          }}
+          animate={{
+            y: [0, Math.random() * -100 - 50, 0],
+            x: [0, Math.random() * 50 - 25, 0],
+          }}
+          transition={{
+            duration: p.duration,
+            delay: p.delay,
+            repeat: Infinity,
+            ease: "linear"
+          }}
+        />
+      ))}
+    </div>
   );
 };
 
