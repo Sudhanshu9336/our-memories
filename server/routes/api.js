@@ -2,7 +2,7 @@ import express from 'express';
 import { loginAdmin, registerAdmin } from '../controllers/authController.js';
 import { getSettings, updateSettings, verifyUser } from '../controllers/settingsController.js';
 import { getPlaces, getPlaceById, createPlace, updatePlace, deletePlace } from '../controllers/placeController.js';
-import { getMediaByPlace, uploadMedia, deleteMedia, reorderMedia } from '../controllers/mediaController.js';
+import { getMediaByPlace, uploadMedia, deleteMedia, reorderMedia, addMediaUrl } from '../controllers/mediaController.js';
 import { protect } from '../middlewares/authMiddleware.js';
 import { upload } from '../config/cloudinary.js';
 
@@ -39,6 +39,7 @@ router.delete('/places/:id', protect, deletePlace);
 // Media
 router.get('/media/:placeId', getMediaByPlace);
 router.post('/media/upload', protect, upload.single('file'), uploadMedia);
+router.post('/media/url', protect, addMediaUrl);
 router.delete('/media/:id', protect, deleteMedia);
 router.put('/media/reorder', protect, reorderMedia);
 

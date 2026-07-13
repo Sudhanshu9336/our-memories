@@ -32,13 +32,37 @@ export const uploadMedia = async (req, res) => {
   }
 };
 
+export const addMediaUrl = async (req, res) => {
+  try {
+    const { placeId, url, type } = req.body;
+    
+    if (!url) {
+      return res.status(400).json({ message: 'No URL provided' });
+    }
+
+    const media = await Media.create({
+      placeId,
+      type: type || 'image',
+      url: url,
+      publicId: 'url_' + Date.now(),
+    });
+
+    res.status(201).json(media);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 export const deleteMedia = async (req, res) => {
   try {
     const media = await Media.findById(req.params.id);
     if (!media) return res.status(404).json({ message: 'Media not found' });
 
-    // Delete from cloudinary
-    await cloudinary.uploader.destroy(media.publicId, { resource_type: media.type === 'video' ? 'video' : 'image' });
+    // Delete from cloudinary if it's an uploaded file
+    if (media.publicId && !media.publicId.startsWith('url_')) {
+      await cloudinary.uploader.destroy(media.publicId, { resource_type: media.type === 'video' ? 'video' : 'image' });
+    }
+    
     await media.deleteOne();
 
     res.json({ message: 'Media removed' });

@@ -4,6 +4,7 @@ import api from '../../services/api';
 import { toast } from 'react-toastify';
 import { Plus, Edit2, Trash2, Image as ImageIcon } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { parseMediaUrl } from '../../utils/urlParser';
 
 const PlacesManage = () => {
   const [places, setPlaces] = useState([]);
@@ -30,11 +31,12 @@ const PlacesManage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      const submitData = { ...formData, coverImage: parseMediaUrl(formData.coverImage) };
       if (editId) {
-        await api.put(`/places/${editId}`, formData);
+        await api.put(`/places/${editId}`, submitData);
         toast.success('Place updated successfully');
       } else {
-        await api.post('/places', formData);
+        await api.post('/places', submitData);
         toast.success('Place created successfully');
       }
       setShowModal(false);

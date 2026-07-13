@@ -198,7 +198,7 @@ const SurpriseAnimation = ({ boyAvatarUrl, girlAvatarUrl }) => {
                       <motion.div 
                         className="text-5xl drop-shadow-2xl relative z-10" 
                         style={{ filter: 'drop-shadow(0px 10px 10px rgba(225,29,72,0.4))' }}
-                        animate={stage >= 4 ? { x: 70, y: -10, rotate: 20 } : { x: 0, y: 0, rotate: 0 }}
+                        animate={stage >= 4 ? { x: 135, y: -15, rotate: 30 } : { x: 0, y: 0, rotate: 0 }}
                         transition={{ duration: 1, type: 'spring' }}
                       >
                         🌹

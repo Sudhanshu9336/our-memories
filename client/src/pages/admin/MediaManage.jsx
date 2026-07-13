@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import api from '../../services/api';
 import { toast } from 'react-toastify';
-import { ArrowLeft, Upload, Trash2, Image as ImageIcon, Video, GripVertical } from 'lucide-react';
+import { ArrowLeft, Upload, Trash2, Image as ImageIcon, Video, GripVertical, Link as Link2 } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { parseMediaUrl, isVideoUrl } from '../../utils/urlParser';
 
 const MediaManage = () => {
   const { id } = useParams();
@@ -11,6 +12,8 @@ const MediaManage = () => {
   const [media, setMedia] = useState([]);
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [mediaUrl, setMediaUrl] = useState('');
+  const [showUrlInput, setShowUrlInput] = useState(false);
 
   useEffect(() => {
     fetchData();
@@ -63,6 +66,30 @@ const MediaManage = () => {
     e.target.value = null;
   };
 
+  const handleAddUrl = async (e) => {
+    e.preventDefault();
+    if (!mediaUrl) return;
+    
+    setUploading(true);
+    try {
+      const parsedUrl = parseMediaUrl(mediaUrl);
+      const isVideo = isVideoUrl(parsedUrl);
+      await api.post('/media/url', { 
+        placeId: id, 
+        url: parsedUrl, 
+        type: isVideo ? 'video' : 'image' 
+      });
+      toast.success('URL added successfully');
+      setMediaUrl('');
+      setShowUrlInput(false);
+      fetchData();
+    } catch (err) {
+      toast.error('Failed to add URL');
+    } finally {
+      setUploading(false);
+    }
+  };
+
   const handleDelete = async (mediaId) => {
     if (window.confirm('Delete this media?')) {
       try {
@@ -90,19 +117,57 @@ const MediaManage = () => {
         <div className="text-center">
           <Upload className="w-12 h-12 text-primary-400 mx-auto mb-4" />
           <h3 className="text-xl font-bold text-white mb-2">Upload Photos & Videos</h3>
-          <p className="text-gray-400 text-sm mb-6">Drag & drop or click to browse</p>
+          <p className="text-gray-400 text-sm mb-6">Drag & drop files or add from a URL</p>
           
-          <label className="bg-primary-600 hover:bg-primary-500 text-white px-6 py-3 rounded-lg cursor-pointer transition-colors inline-block">
-            {uploading ? `Uploading... ${progress}%` : 'Select Files'}
-            <input 
-              type="file" 
-              multiple 
-              accept="image/*,video/*" 
-              className="hidden" 
-              onChange={handleUpload}
-              disabled={uploading}
-            />
-          </label>
+          <div className="flex flex-col items-center gap-4">
+            <label className="bg-primary-600 hover:bg-primary-500 text-white px-6 py-3 rounded-lg cursor-pointer transition-colors inline-block w-full max-w-xs">
+              {uploading && !showUrlInput ? `Uploading... ${progress}%` : 'Select Files'}
+              <input 
+                type="file" 
+                multiple 
+                accept="image/*,video/*" 
+                className="hidden" 
+                onChange={handleUpload}
+                disabled={uploading}
+              />
+            </label>
+
+            <div className="text-gray-500 text-sm">OR</div>
+
+            {!showUrlInput ? (
+              <button 
+                onClick={() => setShowUrlInput(true)}
+                className="bg-white/5 hover:bg-white/10 text-white px-6 py-3 rounded-lg flex items-center justify-center gap-2 transition-colors w-full max-w-xs"
+              >
+                <Link2 className="w-4 h-4" /> Add from URL
+              </button>
+            ) : (
+              <form onSubmit={handleAddUrl} className="flex gap-2 w-full max-w-md mx-auto">
+                <input 
+                  type="text" 
+                  placeholder="Paste URL here (Drive, Photos, etc)" 
+                  className="flex-1 bg-dark-900 border border-white/10 rounded-lg px-4 py-2 text-white focus:border-primary-500 focus:outline-none text-sm"
+                  value={mediaUrl}
+                  onChange={(e) => setMediaUrl(e.target.value)}
+                  disabled={uploading}
+                />
+                <button 
+                  type="submit" 
+                  disabled={uploading || !mediaUrl}
+                  className="bg-primary-600 hover:bg-primary-500 text-white px-4 py-2 rounded-lg transition-colors disabled:opacity-50 text-sm font-medium"
+                >
+                  Add
+                </button>
+                <button 
+                  type="button" 
+                  onClick={() => setShowUrlInput(false)}
+                  className="bg-white/5 hover:bg-white/10 text-white px-4 py-2 rounded-lg transition-colors text-sm font-medium"
+                >
+                  Cancel
+                </button>
+              </form>
+            )}
+          </div>
         </div>
       </div>
 
