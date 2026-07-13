@@ -11,7 +11,15 @@ const SurpriseAnimation = ({ boyAvatarUrl, girlAvatarUrl }) => {
     setStage(1);
     setTimeout(() => setStage(2), 2000);  // kneel
     setTimeout(() => setStage(3), 3500);  // show flower
-    setTimeout(() => setStage(4), 5000);  // hearts explosion
+    setTimeout(() => setStage(4), 5500);  // girl accepts flower
+    setTimeout(() => setStage(5), 7000);  // hearts explosion
+  };
+
+  const replayMoment = () => {
+    setStage(2); // reset to kneel
+    setTimeout(() => setStage(3), 1500);  // show flower
+    setTimeout(() => setStage(4), 3500);  // accept flower
+    setTimeout(() => setStage(5), 5000);  // hearts
   };
 
   const close = () => {
@@ -187,9 +195,14 @@ const SurpriseAnimation = ({ boyAvatarUrl, girlAvatarUrl }) => {
                       {/* Suit Sleeve */}
                       <div className="absolute -left-12 top-6 w-16 h-7 bg-gray-900 rounded-full -rotate-12 shadow-lg" />
                       {/* Hand & Rose */}
-                      <div className="text-5xl drop-shadow-2xl relative z-10" style={{ filter: 'drop-shadow(0px 10px 10px rgba(225,29,72,0.4))' }}>
+                      <motion.div 
+                        className="text-5xl drop-shadow-2xl relative z-10" 
+                        style={{ filter: 'drop-shadow(0px 10px 10px rgba(225,29,72,0.4))' }}
+                        animate={stage >= 4 ? { x: 70, y: -10, rotate: 20 } : { x: 0, y: 0, rotate: 0 }}
+                        transition={{ duration: 1, type: 'spring' }}
+                      >
                         🌹
-                      </div>
+                      </motion.div>
                     </motion.div>
                   )}
                 </AnimatePresence>
@@ -247,8 +260,12 @@ const SurpriseAnimation = ({ boyAvatarUrl, girlAvatarUrl }) => {
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                     >
-                      {/* Left Arm bending to face */}
-                      <div className="w-6 h-16 bg-[#f5d0b5] rounded-full rotate-45 -ml-8 shadow-md" />
+                      {/* Left Arm bending to face or accepting flower */}
+                      <motion.div 
+                        className="w-6 h-16 bg-[#f5d0b5] rounded-full -ml-8 shadow-md" 
+                        animate={stage >= 4 ? { rotate: -15, y: 25, x: -10 } : { rotate: 45, y: 0, x: 0 }}
+                        transition={{ duration: 1, type: 'spring' }}
+                      />
                       {/* Right Arm bending to face */}
                       <div className="w-6 h-16 bg-[#f5d0b5] rounded-full -rotate-45 -mr-8 shadow-md" />
                     </motion.div>
@@ -273,7 +290,7 @@ const SurpriseAnimation = ({ boyAvatarUrl, girlAvatarUrl }) => {
             </div>
 
             <AnimatePresence>
-              {stage >= 4 && floatingHearts.map((h) => (
+              {stage >= 5 && floatingHearts.map((h) => (
                 <motion.div
                   key={`heart-${h.id}`}
                   className="absolute pointer-events-none"
@@ -288,9 +305,9 @@ const SurpriseAnimation = ({ boyAvatarUrl, girlAvatarUrl }) => {
             </AnimatePresence>
 
             <AnimatePresence>
-              {stage >= 4 && (
+              {stage >= 5 && (
                 <motion.div
-                  className="absolute bottom-10 left-0 right-0 text-center z-40 px-4"
+                  className="absolute bottom-10 left-0 right-0 text-center z-40 px-4 flex flex-col items-center"
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 1, duration: 1 }}
@@ -298,7 +315,16 @@ const SurpriseAnimation = ({ boyAvatarUrl, girlAvatarUrl }) => {
                   <h2 className="text-3xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-pink-500 mb-3" style={{ filter: 'drop-shadow(0 0 20px rgba(225,29,72,0.6))' }}>
                     You are my forever 💕
                   </h2>
-                  <p className="text-pink-200/90 text-base md:text-lg font-medium tracking-wide">Every single moment with you is a dream come true.</p>
+                  <p className="text-pink-200/90 text-base md:text-lg font-medium tracking-wide mb-6">Every single moment with you is a dream come true.</p>
+                  
+                  <motion.button 
+                    onClick={replayMoment}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 border border-white/30 text-white px-6 py-2.5 rounded-full backdrop-blur-md transition-colors text-sm font-bold shadow-lg"
+                  >
+                    Replay Moment ⏪
+                  </motion.button>
                 </motion.div>
               )}
             </AnimatePresence>
