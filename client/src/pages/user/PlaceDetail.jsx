@@ -3,7 +3,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import api from '../../services/api';
 import { PhotoProvider, PhotoView } from 'react-photo-view';
-import ReactPlayer from 'react-player';
+
 import { ArrowLeft, Calendar, Heart } from 'lucide-react';
 
 const PlaceDetail = () => {
@@ -131,14 +131,15 @@ const PlaceDetail = () => {
                   transition={{ delay: index * 0.1 }}
                   className="rounded-2xl overflow-hidden glass-card aspect-video border border-white/10 relative"
                 >
-                  <ReactPlayer 
-                    url={item.url} 
-                    width="100%" 
-                    height="100%" 
+                  <video 
+                    src={item.url} 
                     controls 
-                    light={false}
-                    className="absolute top-0 left-0"
-                  />
+                    playsInline
+                    preload="metadata"
+                    className="absolute top-0 left-0 w-full h-full object-cover bg-black"
+                  >
+                    Your browser does not support the video tag.
+                  </video>
                 </motion.div>
               ))}
             </div>
