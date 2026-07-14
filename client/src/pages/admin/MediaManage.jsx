@@ -181,9 +181,12 @@ const MediaManage = () => {
             className="group relative aspect-square rounded-xl overflow-hidden glass-card border border-white/10"
           >
             {item.type === 'video' ? (
-              <div className="w-full h-full bg-dark-900 flex items-center justify-center">
-                <Video className="w-12 h-12 text-gray-500" />
-              </div>
+              <video 
+                src={item.url} 
+                className="w-full h-full object-cover bg-black"
+                controls
+                preload="metadata"
+              />
             ) : (
               <img src={item.url} alt="" className="w-full h-full object-cover" />
             )}
